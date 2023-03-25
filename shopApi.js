@@ -33,6 +33,7 @@ app.get("/resetData", function(req,res){
 	connection.query(sql1, function(err, result) {
 		if (err) console.log(err);
 		else console.log("Successfully deleted. Affected rows :", result.affectedRows);
+		let {data} = require("./shopChainData.js");
 		let arr = data.shops.map(p => [p.shopId, p.name, p.rent]);
 		let sql2 = "INSERT INTO shops(shopId, name, rent) VALUES ?";
 		connection.query(sql2, [arr], function(err, result){
