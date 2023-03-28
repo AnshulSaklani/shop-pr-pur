@@ -25,47 +25,6 @@ app.use(function (req, res, next) {
 var port = process.env.PORT || 2410;
 app.listen(port, () => console.log(`Node app listening on port ${port}!`));
 
-app.get("/resetData", function(req,res){
-	let connection = mysql.createConnection(connData);
-	let sql1 = "DELETE FROM shops";
-	let sqlProd = "DELETE FROM products6";
-	let sqlPur = "DELETE FROM purchases";
-	connection.query(sql1, function(err, result) {
-		if (err) console.log(err);
-		else console.log("Successfully deleted. Affected rows :", result.affectedRows);
-		let {data} = require("./shopChainData.js");
-		let arr = data.shops.map(p => [p.shopId, p.name, p.rent]);
-		let sql2 = "INSERT INTO shops(shopId, name, rent) VALUES ?";
-		connection.query(sql2, [arr], function(err, result){
-			if (err) console.log(err);
-			else console.log("Successfully inserted. Affected rows :", result.affectedRows);
-		});
-	})
-	connection.query(sqlProd, function(err, result) {
-		if (err) console.log(err);
-		else console.log("Successfully deleted. Affected rows :", result.affectedRows);
-		let {data} = require("./shopChainData.js");
-		let arr1 = data.products.map(p => [p.productId, p.productName, p.category, p.description]);
-		let sql3 = "INSERT INTO products6(productId, productName, category, description) VALUES ?";
-		connection.query(sql3, [arr1], function(err, result){
-			if (err) console.log(err);
-			else console.log("Successfully inserted. Affected rows :", result.affectedRows);
-		});
-	})
-	connection.query(sqlPur, function(err, result) {
-		if (err) console.log(err);
-		else console.log("Successfully deleted. Affected rows :", result.affectedRows);
-		let {data} = require("./shopChainData.js");
-		let arr2 = data.purchases.map(p => [p.purchaseId, p.shopId, p.productid, p.quantity, p.price]);
-		let sql4 = "INSERT INTO purchases(purchaseId,shopId, productid, quantity, price) VALUES ?";
-		connection.query(sql4, [arr2], function(err, result){
-			if (err) console.log(err);
-			else console.log("Successfully inserted. Affected rows :", result.affectedRows);
-		});
-	})
-	res.send("Data in file is reset");
-})
-
 app.get("/shops", function(req, res){
 	let connection = mysql.createConnection(connData);
 	let sql = "SELECT * FROM shops";
